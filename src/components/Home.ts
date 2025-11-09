@@ -7,7 +7,7 @@ makeTitle("Tofa7iTS - Home");
 
 const queryParams: ReturnType<typeof makeQueryParams> = makeQueryParams();
 const url: ReturnType<typeof makeState<string>> = makeState(
-  `https://debuggers-games-api.duckdns.org/api/games?${queryParams.toString()}`
+  `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=12&${queryParams.toString()}`
 );
 
 export const Home = (): HTMLElement => {
