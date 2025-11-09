@@ -4,42 +4,56 @@ export const Nav = (
   currentPath: ReturnType<typeof makeState<string>>,
   navigate: (path: string) => void
 ): HTMLElement => {
-  const el = document.createElement("nav") as HTMLDivElement;
-  el.className =
-    "flex gap-6 justify-center items-center py-4 bg-white shadow-sm fixed top-0 w-full h-[8vh]";
+  const header = document.createElement("header") as HTMLDivElement;
+  header.className =
+    "bg-inherit flex justify-between items-center p-4 fixed top-0 w-full h-[5vh] border-b border-card text-[2.5rem]";
+  
+  const logoContainer = document.createElement('div') as HTMLDivElement;
+  logoContainer.className = "flex items-center ml-4 h-full w-1/4";
+  header.appendChild(logoContainer);
 
-  const links: { path: string; label: string }[] = [
-    { path: "/", label: "Home" },
-    { path: "/about/1", label: "About" },
-    { path: "/user/1/Tofa7iTS", label: "User" },
-  ];
+  const logo = document.createElement('img') as HTMLImageElement;
+  logo.src = '/images/logo.png';
+  logo.alt = 'logo';
+  logo.className = 'w-full cursor-pointer';
+  logo.addEventListener('click', () => {
+    navigate('/');
+  });
+  logoContainer.appendChild(logo);
 
-  links.forEach((link: { path: string; label: string }) => {
-    const a = document.createElement("a") as HTMLAnchorElement;
-    a.href = link.path;
-    a.textContent = link.label;
-    a.className =
-      "text-gray-600 hover:text-purple-600 transition font-medium cursor-pointer";
+  const nav = document.createElement('nav') as HTMLDivElement;
+  nav.className = "flex items-center h-full gap-x-10";
+  header.appendChild(nav);
 
-    if (link.path === currentPath.get()) {
-      a.classList.add("text-purple-600", "font-semibold");
-    }
+  const path: string = "/favorites";
 
-    a.addEventListener("click", (e: MouseEvent) => {
-      e.preventDefault();
-      navigate(link.path);
-    });
+  const a = document.createElement("a") as HTMLAnchorElement;
+  a.href = path;
+  a.innerHTML = `<i class="fa-regular fa-heart"></i>`;
+  a.className = "hover:text-purple-600 transition cursor-pointer";
 
-    currentPath.subscribe((p: string) => {
-      if (p === link.path) {
-        a.classList.add("text-purple-600", "font-semibold");
-      } else {
-        a.classList.remove("text-purple-600", "font-semibold");
-      }
-    });
+  if (path === currentPath.get()) {
+    a.classList.add("text-purple-600");
+  }
 
-    el.appendChild(a);
+  a.addEventListener("click", (e: MouseEvent) => {
+    e.preventDefault();
+    navigate(path);
   });
 
-  return el;
+  currentPath.subscribe((p: string) => {
+    if (p === path) {
+      a.classList.add("text-purple-600");
+    } else {
+      a.classList.remove("text-purple-600");
+    }
+  });
+
+  nav.appendChild(a);
+
+  const themeSwitcher = document.createElement("i") as HTMLDivElement;
+  themeSwitcher.innerHTML = `<i class="fa-regular fa-sun cursor-pointer hover:text-purple-600"></i>`;
+  nav.appendChild(themeSwitcher);
+
+  return header;
 };

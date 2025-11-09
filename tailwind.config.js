@@ -13,6 +13,12 @@ export default {
           "100%": { opacity: 0 },
         },
       },
+      colors: {
+        background: "#000000",
+        card: "#242424",
+        primary: "#E5E7EB",
+        secondary: "#9CA3AF",
+      },
     },
   },
   plugins: [],
