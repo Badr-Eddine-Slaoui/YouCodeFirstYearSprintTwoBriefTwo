@@ -1,3 +1,5 @@
+import { router } from "../main";
+
 let favoriterGames = JSON.parse(localStorage.getItem("favoriterGames") || "[]");
 
 
@@ -88,7 +90,11 @@ export const Card = (game: any): HTMLElement => {
         ratingContainer.append(releaseDate);
     }
 
-    render();
+  render();
+  
+    card.addEventListener("click", () => {
+        router.navigate(`/game/${game.id}`);
+    });
 
     return card;
 }

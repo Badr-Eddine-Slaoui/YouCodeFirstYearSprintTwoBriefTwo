@@ -97,11 +97,11 @@ export const makeRouter = (root: HTMLElement, routes: Route[]) : {
 
   window.addEventListener("popstate", render);
 
-  const navigate = (path: string) : void => {
+  const navigate = (path: string): void => {
     if (!path.startsWith("/")) path = `/${path}`;
     window.history.pushState({}, "", path);
     render();
-  };
+  }
 
   render();
 

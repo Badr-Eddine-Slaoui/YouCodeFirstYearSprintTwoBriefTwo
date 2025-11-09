@@ -11,6 +11,9 @@ export const Favorites = (): HTMLElement => {
   const url: ReturnType<typeof makeState<string>> = makeState(
     `page=1&limit=12&${queryParams.toString()}`
   );
+  
+  const header = document.getElementById("header") as HTMLDivElement;
+  header.classList.remove("hidden");
 
   const container = document.createElement("div") as HTMLDivElement;
   container.className = "mt-[5vh]";

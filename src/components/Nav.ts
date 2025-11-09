@@ -5,6 +5,7 @@ export const Nav = (
   navigate: (path: string) => void
 ): HTMLElement => {
   const header = document.createElement("header") as HTMLDivElement;
+  header.id = "header";
   header.className =
     "bg-inherit flex justify-between items-center p-4 fixed z-20 top-0 w-full h-[5vh] border-b border-card text-[2.5rem]";
   
