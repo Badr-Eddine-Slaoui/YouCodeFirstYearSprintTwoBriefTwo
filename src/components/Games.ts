@@ -1,5 +1,6 @@
 import { makeEffect, makeQueryParams, makeState } from "../core";
 import { Card } from "./Card";
+import { LoadingScreen } from "./LoadingScreen";
 
 const fetchGames = async (url: string): Promise<any> => {
   const res = await fetch(url);
@@ -13,6 +14,9 @@ export const Games = (
 ): HTMLElement => {
   const gamecontainer = document.createElement("div") as HTMLDivElement;
   gamecontainer.className = "grid grid-cols-2 gap-y-10 gap-x-8 p-4 my-10";
+
+  const loadingScreen = LoadingScreen();
+
   const render = (): void => {
       let page = 1;
       let nextPage = false;
@@ -21,7 +25,10 @@ export const Games = (
     gamecontainer.append(gameContainerEnd);
 
     const observer = new IntersectionObserver(async (entries) => {
-        if (nextPage) {
+      if (nextPage) {
+        loadingScreen.classList.remove("h-screen");
+        loadingScreen.classList.add("h-[10vh]", "col-span-2");
+          gamecontainer.append(loadingScreen);
           if (entries[0].isIntersecting) {
             queryParams.set(makeQueryParams().get());
             const [games, next] = await fetchGames(
@@ -29,6 +36,8 @@ export const Games = (
             );
               
             if (!next) nextPage = false;
+
+            loadingScreen.remove();
 
             games.forEach((game: any) => {
               gamecontainer.insertBefore(Card(game), gameContainerEnd);
@@ -39,6 +48,8 @@ export const Games = (
     });
 
     makeEffect(async () => {
+      loadingScreen.classList.add("col-span-2");
+      gamecontainer.append(loadingScreen);
       const [games, next] = await fetchGames(url.get());
       games.forEach((game: any) => {
         gamecontainer.insertBefore(Card(game), gameContainerEnd);
@@ -46,6 +57,7 @@ export const Games = (
       if (next) nextPage = true;
       page++;
       observer.observe(gameContainerEnd);
+      loadingScreen.remove();
     });
   };
 

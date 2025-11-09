@@ -15,6 +15,8 @@ export const Favorites = (): HTMLElement => {
   const header = document.getElementById("header") as HTMLDivElement;
   header.classList.remove("hidden");
 
+  document.getElementById("details-header")?.remove();
+
   const container = document.createElement("div") as HTMLDivElement;
   container.className = "mt-[5vh]";
 
