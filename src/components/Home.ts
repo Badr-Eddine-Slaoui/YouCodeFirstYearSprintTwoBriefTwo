@@ -10,6 +10,9 @@ export const Home = (): HTMLElement => {
   const url: ReturnType<typeof makeState<string>> = makeState(
     `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=12&${queryParams.toString()}`
   );
+
+  const header = document.getElementById("header") as HTMLDivElement;
+  header.classList.remove("hidden");
   
   const container = document.createElement("div") as HTMLDivElement;
   container.className = "mt-[5vh]";
