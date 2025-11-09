@@ -138,9 +138,33 @@ export const makeEffect = (
   }
 }
 
-export const makeQueryParams = () : Record<string, string> => {
+export const makeQueryParams = () : ReturnType<typeof makeState<Record<string, string>>> => {
   const params = new URLSearchParams(window.location.search);
-  const query: Record<string, string> = {};
-  params.forEach((v, k) => (query[k] = v));
+  const query: ReturnType<typeof makeState<Record<string, string>>> = makeState<Record<string, string>>({});
+  params.forEach((v, k) => (query.set({ ...query.get(), [k]: v })));
+  query.toString = () => {
+    return Object.entries(query.get())
+      .map(([k, v]) => `${k}=${v}`)
+      .join("&");
+  };
   return query;
 }
+
+export const updateUrl = (
+  url: ReturnType<typeof makeState<string>>,
+  key: string,
+  value: string
+): void => {
+  const params = new URLSearchParams(window.location.search);
+  params.delete(key);
+
+  if (key && value && key !== value) params.set(key, value.replace(/\s+/g, "-").toLowerCase());
+
+  const apiUrl = url.get().split("?")[0];
+  const paramsStr = params.toString();
+  url.set(`${apiUrl}?page=1&limit=12&${paramsStr}`);
+
+  const currentPath = window.location.pathname;
+
+  window.history.pushState({}, "", `${currentPath}${paramsStr ? `?${paramsStr}` : ""}`);
+};

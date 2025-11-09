@@ -1,4 +1,11 @@
-export const Select = (options: Array<string>): HTMLElement => {
+import { updateUrl, type makeState } from "../core";
+
+const getCurrentOption = (key: string): string => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(key.toLowerCase()) || "";
+}
+
+export const Select = (url: ReturnType<typeof makeState<string>>, options: Array<string>): HTMLElement => {
   const container = document.createElement("div") as HTMLDivElement;
   container.className =
     "relative h-full text-primary rounded-[30px] bg-card transition duration-300 ease-in-out";
@@ -19,14 +26,21 @@ export const Select = (options: Array<string>): HTMLElement => {
 
   const dropdown = document.createElement("div") as HTMLDivElement;
   dropdown.className =
-    "absolute max-h-[30vh] overflow-y-scroll top-full left-0 bg-card mt-2 rounded-[30px] overflow-hidden hidden flex flex-col gap-y-5";
+    "absolute z-10 max-h-[30vh] overflow-y-scroll top-full left-0 bg-card mt-2 rounded-[30px] overflow-hidden hidden flex flex-col gap-y-5";
   container.append(dropdown);
 
+    let placeholder: HTMLDivElement;
   options.forEach((option) => {
     const optionElement = document.createElement("div") as HTMLDivElement;
     optionElement.className = "px-8 py-6 cursor-pointer hover:bg-card";
-    if (option === label.textContent) {
-      optionElement.classList.add("bg-primary", "bg-opacity-10");
+      if (option === label.textContent) {
+        placeholder = optionElement;
+        optionElement.classList.add("bg-primary", "bg-opacity-10");
+    }
+    if (option.toLowerCase() === getCurrentOption(options[0].toLowerCase())) {
+        optionElement.classList.add("bg-primary", "bg-opacity-10");
+        placeholder.classList.remove("bg-primary", "bg-opacity-10");
+        label.textContent = option;
     }
     optionElement.textContent = option;
     dropdown.append(optionElement);
@@ -45,8 +59,12 @@ export const Select = (options: Array<string>): HTMLElement => {
       el.classList.remove("bg-primary", "bg-opacity-10");
     });
       
-    clicked.classList.add("bg-primary", "bg-opacity-10");
+      clicked.classList.add("bg-primary", "bg-opacity-10");
+      
+      const key = options[0].toLowerCase();
 
+    updateUrl(url, key, clicked.textContent.toLowerCase());
+    
     label.textContent = clicked.textContent;
 
     dropdown.classList.add("hidden");
