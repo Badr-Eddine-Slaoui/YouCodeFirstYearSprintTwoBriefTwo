@@ -1,8 +1,15 @@
 import { makeState, makeEffect, makeQueryParams, makeTitle } from "../core";
+import { Card } from "./Card";
 import { Filters } from "./Filters";
 import { Search } from "./Search";
 
 makeTitle("Tofa7iTS - Home");
+
+const fetchGames = async (url: string) : Promise<any> => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.results;
+};
 
 
 export const Home = (): HTMLElement => {
@@ -12,6 +19,7 @@ export const Home = (): HTMLElement => {
   container.className = "mt-[5vh]";
 
   const render = (): void => {
+    let page = 1;
     container.innerHTML = "";
 
     const filterContainer = document.createElement("div") as HTMLDivElement;
@@ -21,11 +29,35 @@ export const Home = (): HTMLElement => {
 
     container.append(filterContainer);
 
-    const el = document.createElement("div") as HTMLDivElement;
-    el.className = "text-center";
-    el.innerHTML = `<h1 class="text-3xl font-bold text-purple-600 mb-4">Home</h1>`
+    const gamecontainer = document.createElement("div") as HTMLDivElement;
+    gamecontainer.className = "grid grid-cols-2 gap-y-10 gap-x-8 p-4 my-10";
 
-    container.append(el);
+    const gameContainerEnd = document.createElement("div") as HTMLDivElement;
+    gamecontainer.append(gameContainerEnd);
+
+    makeEffect(async () => {
+      const games = await fetchGames(`https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=12`);
+      games.forEach((game: any) => {
+        gamecontainer.insertBefore(Card(game), gameContainerEnd);
+      });
+      page++;
+    });
+
+    const observer = new IntersectionObserver(async(entries) => {
+      if (entries[0].isIntersecting) {
+        const games = await fetchGames(
+          `https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=12`
+        );
+        games.forEach((game: any) => {
+          gamecontainer.insertBefore(Card(game), gameContainerEnd);
+        });
+        page++;
+      }
+    });
+
+    observer.observe(gameContainerEnd);
+
+    container.append(gamecontainer);
   };
 
   render();

@@ -6,7 +6,7 @@ export const Nav = (
 ): HTMLElement => {
   const header = document.createElement("header") as HTMLDivElement;
   header.className =
-    "bg-inherit flex justify-between items-center p-4 fixed top-0 w-full h-[5vh] border-b border-card text-[2.5rem]";
+    "bg-inherit flex justify-between items-center p-4 fixed z-20 top-0 w-full h-[5vh] border-b border-card text-[2.5rem]";
   
   const logoContainer = document.createElement('div') as HTMLDivElement;
   logoContainer.className = "flex items-center ml-4 h-full w-1/4";
