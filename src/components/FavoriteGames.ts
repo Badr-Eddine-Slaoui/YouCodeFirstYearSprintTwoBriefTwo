@@ -1,5 +1,6 @@
 import { makeEffect, makeQueryParams, makeState } from "../core";
 import { Card } from "./Card";
+import { LoadingScreen } from "./LoadingScreen";
 
 let favoriterGames = JSON.parse(localStorage.getItem("favoriterGames") || "[]");
 
@@ -50,6 +51,9 @@ export const FavoriteGames = (
 ): HTMLElement => {
   const gamecontainer = document.createElement("div") as HTMLDivElement;
   gamecontainer.className = "grid grid-cols-2 gap-y-10 gap-x-8 p-4 my-10";
+
+  const loadingScreen = LoadingScreen();
+
     const render = (): void => {
       let page = 1;
       let nextPage = false;
@@ -58,7 +62,10 @@ export const FavoriteGames = (
     gamecontainer.append(gameContainerEnd);
 
     const observer = new IntersectionObserver((entries) => {
-        if (nextPage) {
+      if (nextPage) {
+        loadingScreen.classList.remove("h-screen");
+        loadingScreen.classList.add("h-[10vh]", "col-span-2");
+          gamecontainer.append(loadingScreen);
           if (entries[0].isIntersecting) {
             queryParams.set(makeQueryParams().get());
             const [games, next] = fetchGames(
@@ -67,6 +74,7 @@ export const FavoriteGames = (
               
             if (!next) nextPage = false;
 
+            loadingScreen.remove();
             games.forEach((game: any) => {
               gamecontainer.insertBefore(Card(game), gameContainerEnd);
             });
@@ -76,6 +84,8 @@ export const FavoriteGames = (
     });
 
     makeEffect(() => {
+      loadingScreen.classList.add("col-span-2");
+      gamecontainer.append(loadingScreen);
       const [games, next] = fetchGames(url.get().split("?")[1]);
       games.forEach((game: any) => {
         gamecontainer.insertBefore(Card(game), gameContainerEnd);
@@ -83,6 +93,7 @@ export const FavoriteGames = (
       if (next) nextPage = true;
       page++;
       observer.observe(gameContainerEnd);
+      loadingScreen.remove();
     });
   };
 

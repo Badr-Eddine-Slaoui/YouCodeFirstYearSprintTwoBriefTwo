@@ -5,6 +5,7 @@ export default {
     extend: {
       animation: {
         "switch-component": "switch-component 1.2s ease-in-out",
+        'spin-slow': 'spin 6s infinite ease-in-out',
       },
       keyframes: {
         "switch-component": {
