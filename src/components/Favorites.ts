@@ -1,16 +1,17 @@
 import { makeState, makeQueryParams, makeTitle } from "../core";
+import { FavoriteGames } from "./FavoriteGames";
 import { Filters } from "./Filters";
-import { Games } from "./Games";
 import { Search } from "./Search";
 
-makeTitle("Tofa7iTS - Home");
+makeTitle("Tofa7iTS - Favorites");
 
-export const Home = (): HTMLElement => {
+
+export const Favorites = (): HTMLElement => {
   const queryParams: ReturnType<typeof makeQueryParams> = makeQueryParams();
   const url: ReturnType<typeof makeState<string>> = makeState(
-    `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=12&${queryParams.toString()}`
+    `page=1&limit=12&${queryParams.toString()}`
   );
-  
+
   const container = document.createElement("div") as HTMLDivElement;
   container.className = "mt-[5vh]";
 
@@ -24,11 +25,11 @@ export const Home = (): HTMLElement => {
 
     container.append(filterContainer);
 
-    const gamecontainer = Games(queryParams, url);
+    const gamecontainer = FavoriteGames(queryParams, url);
 
     container.append(gamecontainer);
   };
-  
+
   render();
 
   return container;
