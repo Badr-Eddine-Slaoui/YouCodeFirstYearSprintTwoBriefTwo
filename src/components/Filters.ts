@@ -11,7 +11,7 @@ export const Filters = async (url: ReturnType<typeof makeState<string>>): Promis
 
   const container = document.createElement("div") as HTMLDivElement;
   container.className =
-    "flex h-[4vh] gap-4 justify-start items-center px-4 text-[2.5rem]";
+    "flex flex-wrap min-h-[4vh] gap-4 justify-start items-center px-4 text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] xl:text-[1.6rem]";
 
   container.append(Select(url, ["Genre", ...genres]));
   container.append(Select(url, ["Platform", ...platforms]));

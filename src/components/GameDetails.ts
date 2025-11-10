@@ -1,5 +1,4 @@
 import { makeEffect } from "../core";
-import { router } from '../main';
 import { LoadingScreen } from './LoadingScreen';
 
 let favoriterGames = JSON.parse(localStorage.getItem("favoriterGames") || "[]");
@@ -29,19 +28,20 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
     const detailsHeader = document.createElement("div") as HTMLDivElement;
     detailsHeader.id = "details-header";
     detailsHeader.className =
-      "bg-inherit flex justify-between items-center py-4 px-8 fixed z-20 top-0 w-full h-[6vh] border-b border-card text-[2.5rem]";
+        "bg-inherit flex justify-between items-center py-4 px-8 fixed z-20 top-0 w-full h-[6vh] border-b border-card text[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] xl:text-[1.6rem]"
+        + " 2xs:h-[8vh] xs:h-[9vh] sm:h-[10vh] md:h-[12vh] lg:h-[14vh] xl:h-[16vh]";
 
     document.body.prepend(detailsHeader);
 
     const back = document.createElement("i") as HTMLDivElement;
-    back.className = "fa-solid fa-arrow-left text-4xl cursor-pointer";
+    back.className = "fa-solid fa-arrow-left cursor-pointer";
     back.addEventListener("click", () => {
         history.back();
     });
     detailsHeader.append(back);
 
     const title = document.createElement("h1") as HTMLDivElement;
-    title.className = "text-4xl font-bold";
+    title.className = "font-bold";
     title.textContent = "Game Details";
     detailsHeader.append(title);
 
@@ -53,9 +53,9 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
 
     const render = (): void => {
         container.innerHTML = "";
-        container.className = "py-16";
+        container.className = "mt-[6vh] pb-5 2xs:mt-[8vh] xs:mt-[9vh] sm:mt-[10vh] md:mt-[12vh] lg:mt-[14vh] xl:mt-[16vh]";
         const imageContainer = document.createElement("div") as HTMLDivElement;
-        imageContainer.className = "flex w-full h-[30vh] items-center justify-center";
+        imageContainer.className = "flex w-full h-[30vh] items-center justify-center sm:h-[40vh] md:h-[50vh] lg:h-[60vh] xl:h-[85vh]";
 
         const image = document.createElement("img") as HTMLImageElement;
         image.src = game.background_image;
@@ -66,21 +66,22 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
         container.append(imageContainer);
 
         const gameDetails = document.createElement("div") as HTMLDivElement;
-        gameDetails.className = "p-8 w-[90%] mx-auto relative top-[-8vh] min-h-[30vh] bg-card rounded-[30px] bg-opacity-80 z-[1]";
+        gameDetails.className = "p-4 w-[90%] mx-auto relative top-[-8vh] min-h-[20vh] bg-card rounded-[15px] bg-opacity-80 z-[1] text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:p-6 sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] lg:p-8 xl:text-[1.6rem]";
         container.append(gameDetails);
 
         const title = document.createElement("h1") as HTMLDivElement;
-        title.className = "text-[4rem] font-extrabold mb-6";
+        title.className = "font-extrabold mb-6 text-[1.2rem] 2xs:text-[1.4rem] xs:text-[1.6rem] sm:text-[1.8rem] md:text-[2rem] lg:text-[1.8rem] xl:text-[2rem]";
         title.textContent = game.name;
         gameDetails.append(title);
 
         const genresContainer = document.createElement("div") as HTMLDivElement;
-        genresContainer.className = "flex flex-wrap gap-16 my-10";
+        genresContainer.className = "flex flex-wrap my-5 gap-4 xl:gap-6 xl:my-10";
         gameDetails.append(genresContainer);
 
         game.genres.forEach((genre: any) => {
             const genreEl = document.createElement("span") as HTMLDivElement;
-            genreEl.className = "text-[2.5rem] bg-primary text-bold text-card px-6 py-4 min-w-48 rounded-full text-center bg-opacity-30";
+            genreEl.className =
+              "bg-primary text-bold text-card rounded-full text-center bg-opacity-30 min-w-12 px-3 py-1 sm:px-4 sm:py-2 xl:px-5 xl:py-3";
             genreEl.textContent = genre.name;
             if (genre.name === "Action") {
                 genreEl.classList.add("bg-purple-500", "text-purple-600");
@@ -115,44 +116,44 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
         });
 
         const platformsContainer = document.createElement("div") as HTMLDivElement;
-        platformsContainer.className = "flex flex-wrap gap-16 my-20";
+        platformsContainer.className = "flex flex-wrap my-5 gap-4 text-[0.8rem] 2xs:text-[1rem] 2xs:gap-y-4 2xs:gap-x-8 xs:text-[1.2rem] sm:text-[1.4rem] sm:gap-y-4 sm:gap-x-10 md:text-[1.6rem] lg:text-[1.4rem] xl:text-[1.6rem] xl:gap-y-4 xl:gap-x-12";
         gameDetails.append(platformsContainer);
 
         const ratingContainer = document.createElement("div") as HTMLDivElement;
-        ratingContainer.className = "flex flex-col justify-start gap-y-4 items-center max-w-44 text-center";
+        ratingContainer.className = "flex flex-col justify-start gap-y-2 items-center max-w-14 2xs:max-w-19 sm:max-w-32 text-center";
         platformsContainer.append(ratingContainer);
 
         const ratingIcon = document.createElement("i") as HTMLImageElement;
-        ratingIcon.className = "w-[4vh] h-[4vh] text-[3rem] text-primary bg-card rounded-full flex items-center justify-center";
+        ratingIcon.className = "w-[4vh] h-[4vh] text-primary bg-card rounded-full flex items-center justify-center";
         ratingIcon.classList.add("fa-regular", "fa-star");
         ratingContainer.append(ratingIcon);
 
         const rating = document.createElement("span") as HTMLDivElement;
-        rating.className = "text-[2.5rem] font-bold";
+        rating.className = "font-bold";
         rating.textContent = game.rating;
         ratingContainer.append(rating);
         
         const releaseDateContainer = document.createElement("div") as HTMLDivElement;
-        releaseDateContainer.className = "flex flex-col justify-start gap-y-4 items-center max-w-44 text-center";
+        releaseDateContainer.className = "flex flex-col justify-start gap-y-2 items-center max-w-14 2xs:max-w-19 sm:max-w-32 text-center";
         platformsContainer.append(releaseDateContainer);
 
         const releaseDateIcon = document.createElement("i") as HTMLImageElement;
-        releaseDateIcon.className = "w-[4vh] h-[4vh] text-[3rem] text-primary bg-card rounded-full flex items-center justify-center";
+        releaseDateIcon.className = "w-[4vh] h-[4vh] text-primary bg-card rounded-full flex items-center justify-center";
         releaseDateIcon.classList.add("fa-regular", "fa-calendar");
         releaseDateContainer.append(releaseDateIcon);
 
         const releaseDate = document.createElement("span") as HTMLDivElement;
-        releaseDate.className = "text-[2.5rem] font-bold";
+        releaseDate.className = "font-bold";
         releaseDate.textContent = game.released;
         releaseDateContainer.append(releaseDate);
 
         game.platforms.forEach(({platform}: any) => {
             const platformEl = document.createElement("div") as HTMLDivElement;
-            platformEl.className = "flex flex-col justify-start gap-y-4 items-center max-w-40 text-center";
+            platformEl.className = "flex flex-col justify-start gap-y-2 items-center max-w-14 2xs:max-w-19 sm:max-w-32 text-center";
             platformsContainer.append(platformEl);
 
             const platformIcon = document.createElement("i") as HTMLImageElement;
-            platformIcon.className = "w-[4vh] h-[4vh] text-[3rem] text-primary bg-card rounded-full flex items-center justify-center";
+            platformIcon.className = "w-[4vh] h-[4vh] text-primary bg-card rounded-full flex items-center justify-center";
             if (platform.name === "PC") {
                 platformIcon.classList.add("fa-brands", "fa-windows");
             }else if (platform.name.includes("PlayStation")) {
@@ -171,45 +172,45 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
             platformEl.append(platformIcon);
 
             const platformName = document.createElement("span") as HTMLDivElement;
-            platformName.className = "text-[2.5rem] font-bold";
+            platformName.className = "font-bold";
             platformName.textContent = platform.name;
             platformEl.append(platformName);
         });
 
         const gameAbout = document.createElement("div") as HTMLDivElement;
-        gameAbout.className = "p-8 w-[90%] mx-auto relative top-[-4vh] min-h-[30vh] bg-card rounded-[30px] bg-opacity-80";
+        gameAbout.className = "p-4 w-[90%] mx-auto relative top-[-4vh] min-h-[30vh] bg-card rounded-[15px] bg-opacity-80 text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:p-6 sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] lg:p-8 xl:text-[1.6rem]";
         container.append(gameAbout);
 
         const aboutTitle = document.createElement("h2") as HTMLDivElement;
-        aboutTitle.className = "text-[4rem] font-extrabold mb-6";
+        aboutTitle.className = "font-extrabold mb-6";
         aboutTitle.textContent = "About";
         gameAbout.append(aboutTitle);
 
         const aboutText = document.createElement("p") as HTMLDivElement;
-        aboutText.className = "text-[2.5rem] font-bold text-secondary";
+        aboutText.className = "font-bold text-secondary";
         aboutText.textContent = game.description;
         gameAbout.append(aboutText);
         
         const infos = document.createElement("div") as HTMLDivElement;
-        infos.className = "p-8 w-[90%] mx-auto min-h-[10vh] bg-card rounded-[30px] bg-opacity-80";
+        infos.className = "p-4 w-[90%] mx-auto min-h-[10vh] bg-card rounded-[15px] bg-opacity-80 text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] sm:p-6 md:text-[1.6rem] lg:text-[1.4rem] lg:p-8 xl:text-[1.6rem]";
         container.append(infos);
 
         const infosTitle = document.createElement("h2") as HTMLDivElement;
-        infosTitle.className = "text-[4rem] font-extrabold mb-6";
+        infosTitle.className = "font-extrabold mb-6";
         infosTitle.textContent = "Infos";
         infos.append(infosTitle);
 
         const publishersContainer = document.createElement("div") as HTMLDivElement;
-        publishersContainer.className = "flex justify-between items-center my-10";
+        publishersContainer.className = "flex justify-between items-center my-5";
         infos.append(publishersContainer);
 
         const publishersText = document.createElement("span") as HTMLDivElement;
-        publishersText.className = "text-[2.5rem] font-bold text-secondary";
+        publishersText.className = "font-bold text-secondary";
         publishersText.textContent = "Publishers";
         publishersContainer.append(publishersText);
 
         const publishers = document.createElement("span") as HTMLDivElement;
-        publishers.className = "text-[2.5rem] font-bold text-primary";
+        publishers.className = "font-bold text-primary";
         publishers.textContent = game.publishers.map((publisher: any) => publisher.name).join(", ");
         publishersContainer.append(publishers);
 
@@ -218,12 +219,12 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
         infos.append(developersContainer);
 
         const developersText = document.createElement("span") as HTMLDivElement;
-        developersText.className = "text-[2.5rem] font-bold text-secondary";
+        developersText.className = "font-bold text-secondary";
         developersText.textContent = "Developers";
         developersContainer.append(developersText);
 
         const developers = document.createElement("span") as HTMLDivElement;
-        developers.className = "text-[2.5rem] font-bold text-primary";
+        developers.className = "font-bold text-primary";
         developers.textContent = game.developers.map((developer: any) => developer.name).join(", ");
         developersContainer.append(developers);
         
@@ -232,7 +233,7 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
 
     const renderFavoritesBtn = (): void => {
         favoriteBtn.innerHTML = "";
-        favoriteBtn.className = "w-[90%] mx-auto my-[4vh] flex justify-center items-center px-24 py-6 text-[2.5rem] font-bold text-primary bg-blue-500 rounded-[30px]";
+        favoriteBtn.className = "w-[90%] mx-auto my-[4vh] flex justify-center items-center px-6 py-3 font-bold text-primary bg-blue-500 text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] lg:py-5 xl:text-[1.6rem] rounded-[30px]";
 
         const favoriteIcon = document.createElement("i") as HTMLDivElement;
         favoriteIcon.className = "mr-4";

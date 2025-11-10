@@ -5,7 +5,7 @@ export default {
     extend: {
       animation: {
         "switch-component": "switch-component 1.2s ease-in-out",
-        'spin-slow': 'spin 6s infinite ease-in-out',
+        "spin-slow": "spin 6s infinite ease-in-out",
       },
       keyframes: {
         "switch-component": {
@@ -19,6 +19,10 @@ export default {
         card: "#242424",
         primary: "#E5E7EB",
         secondary: "#9CA3AF",
+      },
+      screens: {
+        "2xs": "400px",
+        xs: "500px",
       },
     },
   },
