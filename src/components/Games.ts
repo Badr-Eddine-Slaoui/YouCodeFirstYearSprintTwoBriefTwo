@@ -13,7 +13,7 @@ export const Games = (
   url: ReturnType<typeof makeState<string>>
 ): HTMLElement => {
   const gamecontainer = document.createElement("div") as HTMLDivElement;
-  gamecontainer.className = "grid grid-cols-2 gap-y-10 gap-x-8 p-4 my-10";
+  gamecontainer.className = "grid grid-cols-1 gap-y-5 p-4 my-4 sm:grid-cols-2 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4 lg:my-8";
 
   const loadingScreen = LoadingScreen();
 
@@ -27,7 +27,7 @@ export const Games = (
     const observer = new IntersectionObserver(async (entries) => {
       if (nextPage) {
         loadingScreen.classList.remove("h-screen");
-        loadingScreen.classList.add("h-[10vh]", "col-span-2");
+        loadingScreen.classList.add("h-[10vh]", "sm:col-span-2", "md:col-span-3", "xl:col-span-4");
           gamecontainer.append(loadingScreen);
           if (entries[0].isIntersecting) {
             queryParams.set(makeQueryParams().get());
@@ -48,7 +48,7 @@ export const Games = (
     });
 
     makeEffect(async () => {
-      loadingScreen.classList.add("col-span-2");
+      loadingScreen.classList.add("sm:col-span-2", "md:col-span-3", "xl:col-span-4");
       gamecontainer.append(loadingScreen);
       const [games, next] = await fetchGames(url.get());
       games.forEach((game: any) => {
