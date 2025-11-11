@@ -1,4 +1,5 @@
 import { makeEffect } from "../core";
+import { Error } from "../errors/Error";
 import { LoadingScreen } from './LoadingScreen';
 
 let favoriterGames = JSON.parse(localStorage.getItem("favoriterGames") || "[]");
@@ -258,15 +259,26 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
         };
         container.append(favoriteBtn);
     };
-    
-    makeEffect(async () => {
-        const loadingScreen = LoadingScreen();
-        container.append(loadingScreen);
-        const response = await fetch(`https://debuggers-games-api.duckdns.org/api/games/${id}`);
-        game = await response.json();
-        loadingScreen.remove();
+
+    const renderAll = (): void => {
+        container.innerHTML = "";
         render();
         renderFavoritesBtn();
+    };
+    
+    makeEffect(async () => {
+        try {
+            const loadingScreen = LoadingScreen();
+            container.append(loadingScreen);
+            const response = await fetch(`https://debuggers-games-api.duckdns.org/api/games/${id}`);
+            game = await response.json();
+            loadingScreen.remove();
+            render();
+            renderFavoritesBtn();
+        }catch (error) {
+            container.innerHTML = "";
+            container.append(Error(renderAll));
+        }
     }, []);
     
 

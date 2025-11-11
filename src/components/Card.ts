@@ -146,13 +146,6 @@ export const Card = (game: any): HTMLElement => {
       
       const current = e.currentTarget as HTMLDivElement;
 
-      if (e.clientY < current.offsetTop - 400) {
-        window.scrollBy({
-          top: e.clientY - current.offsetTop,
-          behavior: "smooth",
-        });
-      }
-
       card.classList.add(
         "opacity-50",
         "scale-[0.5]",
@@ -161,6 +154,13 @@ export const Card = (game: any): HTMLElement => {
         "duration-300",
         "ease-in-out"
       );
+
+      if (e.clientY < current.offsetTop - 400 || e.clientY > current.offsetTop + 400) {
+        window.scrollBy({
+          top: e.clientY - current.offsetTop,
+          behavior: "smooth",
+        });
+      }
     });
 
     card.addEventListener("dragover", (e) => {
