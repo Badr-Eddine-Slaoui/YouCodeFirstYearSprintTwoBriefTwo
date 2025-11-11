@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts}"],
+  darkMode: "class",
   theme: {
     extend: {
       animation: {
@@ -19,6 +20,12 @@ export default {
         card: "#242424",
         primary: "#E5E7EB",
         secondary: "#9CA3AF",
+        light: {
+          background: "#F9FAFB",
+          card: "#FFFFFF",
+          primary: "#111827",
+          secondary: "#4B5563",
+        },
       },
       screens: {
         "2xs": "400px",

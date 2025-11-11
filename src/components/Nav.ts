@@ -60,8 +60,23 @@ export const Nav = (
   nav.appendChild(a);
 
   const themeSwitcher = document.createElement("i") as HTMLDivElement;
-  themeSwitcher.innerHTML = `<i class="fa-regular fa-sun cursor-pointer hover:text-purple-600 transition-colors duration-300"></i>`;
-  nav.appendChild(themeSwitcher);
+
+  const renderThemeIcon = (): void => {
+    if (document.documentElement.classList.contains("dark"))
+      themeSwitcher.innerHTML = `<i class="fa-regular fa-moon cursor-pointer hover:text-purple-600 transition-colors duration-300"></i>`;
+    else
+      themeSwitcher.innerHTML = `<i class="fa-regular fa-sun cursor-pointer hover:text-purple-600 transition-colors duration-300"></i>`;
+
+    themeSwitcher.onclick = () => {
+      document.documentElement.classList.toggle("dark");
+      localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+      renderThemeIcon();
+    }
+
+    nav.appendChild(themeSwitcher);
+  }
+
+  renderThemeIcon();
 
   return header;
 };

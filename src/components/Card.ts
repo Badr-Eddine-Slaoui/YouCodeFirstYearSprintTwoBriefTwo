@@ -19,7 +19,7 @@ const isFavorite = (game: any) => {
 export const Card = (game: any): HTMLElement => {
   const card = document.createElement("div") as HTMLDivElement;
   card.className =
-    "h-[40vh] w-full bg-card rounded-[10px] overflow-hidden xs:h-[45vh] lg:h-[55vh] xl:h-[65vh]" +
+    "h-[40vh] w-full border border-card bg-light-card dark:bg-card rounded-[10px] overflow-hidden xs:h-[45vh] lg:h-[55vh] xl:h-[65vh]" +
     " text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.1rem] lg:text-[1.5rem] xl:text-[1.6rem]";
 
   card.dataset.id = game.id.toString();
@@ -39,7 +39,7 @@ export const Card = (game: any): HTMLElement => {
 
     const icon = document.createElement("i") as HTMLDivElement;
     icon.className =
-      "absolute top-2 right-2 transform z-[1] bg-card p-2 rounded-full w-[4vh] h-[4vh] flex items-center justify-center bg-opacity-50 cursor-pointer" +
+      "absolute top-2 right-2 transform z-[1] bg-light-card dark:bg-card p-2 rounded-full w-[4vh] h-[4vh] flex items-center justify-center bg-opacity-50 cursor-pointer" +
       " xs:w-[5vh] xs:h-[5vh] xs:p-4 xs:top-3 xs:right-3 lg:w-[6vh] lg:h-[6vh] lg:p-6 lg:top-4 lg:right-4";
 
     if (isFavorite(game)) {
@@ -50,7 +50,11 @@ export const Card = (game: any): HTMLElement => {
         render();
       });
     } else {
-      icon.classList.add("text-primary", "fa-regular", "fa-heart");
+      icon.classList.add(
+        "text-light-primary", "dark:text-primary",
+        "fa-regular",
+        "fa-heart"
+      );
       icon.addEventListener("click", (e) => {
         e.stopPropagation();
         addToFavorites(game);
@@ -77,7 +81,7 @@ export const Card = (game: any): HTMLElement => {
     content.append(title);
 
     const genre = document.createElement("p") as HTMLParagraphElement;
-    genre.className = "text-secondary w-82 truncate";
+    genre.className = "text-light-secondary dark:text-secondary w-82 truncate";
     genre.textContent = game.genres.map((genre: any) => genre.name).join(", ");
     content.append(genre);
 
@@ -86,12 +90,12 @@ export const Card = (game: any): HTMLElement => {
     content.append(ratingContainer);
 
     const rating = document.createElement("p") as HTMLParagraphElement;
-    rating.className = "text-secondary";
+    rating.className = "text-light-secondary dark:text-secondary";
     rating.innerHTML = `<i class="fa-regular fa-star text-yellow-400"></i> ${game.rating}`;
     ratingContainer.append(rating);
 
     const releaseDate = document.createElement("p") as HTMLParagraphElement;
-    releaseDate.className = "text-secondary";
+    releaseDate.className = "text-light-secondary dark:text-secondary";
     releaseDate.textContent = `${game.released}`;
     ratingContainer.append(releaseDate);
 
@@ -114,7 +118,7 @@ export const Card = (game: any): HTMLElement => {
       if (isInFavorites) {
         favorite.children[0].classList.remove("fa-heart");
         favorite.children[0].classList.add("fa-trash-can");
-      }else{
+      } else {
         favorite.children[0].classList.remove("fa-trash-can");
         favorite.children[0].classList.add("fa-heart");
       }
@@ -143,7 +147,6 @@ export const Card = (game: any): HTMLElement => {
     });
 
     card.addEventListener("drag", (e) => {
-      
       const current = e.currentTarget as HTMLDivElement;
 
       card.classList.add(
@@ -155,7 +158,10 @@ export const Card = (game: any): HTMLElement => {
         "ease-in-out"
       );
 
-      if (e.clientY < current.offsetTop - 400 || e.clientY > current.offsetTop + 400) {
+      if (
+        e.clientY < current.offsetTop - 400 ||
+        e.clientY > current.offsetTop + 400
+      ) {
         window.scrollBy({
           top: e.clientY - current.offsetTop,
           behavior: "smooth",
@@ -164,17 +170,17 @@ export const Card = (game: any): HTMLElement => {
     });
 
     card.addEventListener("dragover", (e) => {
-       e.preventDefault();
+      e.preventDefault();
 
-       const container = card.parentElement as HTMLDivElement;
-       const rect = container.getBoundingClientRect();
-       const scrollSpeed = 10;
+      const container = card.parentElement as HTMLDivElement;
+      const rect = container.getBoundingClientRect();
+      const scrollSpeed = 10;
 
-       if (e.clientY < rect.top + 50) {
-         container.scrollBy({ top: -scrollSpeed, behavior: "smooth" });
-       } else if (e.clientY > rect.bottom - 50) {
-         container.scrollBy({ top: scrollSpeed, behavior: "smooth" });
-       }
+      if (e.clientY < rect.top + 50) {
+        container.scrollBy({ top: -scrollSpeed, behavior: "smooth" });
+      } else if (e.clientY > rect.bottom - 50) {
+        container.scrollBy({ top: scrollSpeed, behavior: "smooth" });
+      }
 
       card.classList.add(
         "opacity-50",
@@ -239,7 +245,7 @@ export const Card = (game: any): HTMLElement => {
     favorite.ondragover = (e) => {
       e.preventDefault();
     };
-    favorite.ondrop =  (e) => {
+    favorite.ondrop = (e) => {
       e.preventDefault();
       const draggedCardId = e.dataTransfer?.getData("draggedCardId") as string;
       const draggedCard = document.querySelector(
@@ -247,12 +253,14 @@ export const Card = (game: any): HTMLElement => {
       ) as HTMLDivElement;
 
       const currentGame = JSON.parse(draggedCard.dataset.game as string);
-      
-      const isInFavorites = favoriterGames.find((g: any) => g.id === parseInt(draggedCardId));
+
+      const isInFavorites = favoriterGames.find(
+        (g: any) => g.id === parseInt(draggedCardId)
+      );
 
       if (isInFavorites) {
         removeFromFavorites(currentGame);
-        if(window.location.pathname === "/favorites") draggedCard.remove();
+        if (window.location.pathname === "/favorites") draggedCard.remove();
       } else {
         addToFavorites(currentGame);
       }

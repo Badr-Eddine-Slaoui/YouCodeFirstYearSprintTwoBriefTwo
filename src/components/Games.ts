@@ -20,7 +20,6 @@ export const Games = (
   const loadingScreen = LoadingScreen();
 
   const render = (): void => {
-      console.log("render");
       let page = 1;
       let nextPage = false;
     gamecontainer.innerHTML = "";

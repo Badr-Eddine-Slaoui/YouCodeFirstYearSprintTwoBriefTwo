@@ -5,6 +5,9 @@ import { Home } from "./components/Home";
 import { Favorites } from "./components/Favorites";
 import { GameDetails } from "./components/GameDetails";
 
+const theme = localStorage.getItem("theme");
+if (theme) document.documentElement.classList.add(theme);
+
 const appRoot = document.getElementById("app") as HTMLDivElement;
 export const router = makeRouter(appRoot, [
   { path: "/", component: Home },
