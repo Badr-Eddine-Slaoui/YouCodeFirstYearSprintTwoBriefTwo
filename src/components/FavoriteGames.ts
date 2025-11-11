@@ -1,4 +1,5 @@
 import { makeEffect, makeQueryParams, makeState } from "../core";
+import { Error } from "../errors/Error";
 import { Card } from "./Card";
 import { LoadingScreen } from "./LoadingScreen";
 import { NoGames } from "./NoGames";
@@ -72,43 +73,55 @@ export const FavoriteGames = (
         loadingScreen.classList.add("h-[10vh]", "col-span-2");
           gamecontainer.append(loadingScreen);
           if (entries[0].isIntersecting) {
-            queryParams.set(makeQueryParams().get());
-            const [games, next] = fetchGames(
-              `page=${page}&limit=12&${queryParams.toString()}`,
-              favoriterGames
-            );
-              
-            if (!next) nextPage = false;
+            try {
+              queryParams.set(makeQueryParams().get());
+              const [games, next] = fetchGames(
+                `page=${page}&limit=12&${queryParams.toString()}`,
+                favoriterGames
+              );
+                
+              if (!next) nextPage = false;
 
-            loadingScreen.remove();
-            games.forEach((game: any) => {
-              gamecontainer.insertBefore(Card(game), gameContainerEnd);
-            });
-            page++;
+              loadingScreen.remove();
+              games.forEach((game: any) => {
+                gamecontainer.insertBefore(Card(game), gameContainerEnd);
+              });
+              page++;
+            }catch (error) {
+              gamecontainer.innerHTML = "";
+              gamecontainer.append(Error(render));
+            }
           }
       }
     });
 
     makeEffect(() => {
-      loadingScreen.classList.add("col-span-2");
-      gamecontainer.append(loadingScreen);
-      const [games, next] = fetchGames(url.get().split("?")[1], favoriterGames);
+      try {
+        loadingScreen.classList.add("col-span-2");
+        gamecontainer.append(loadingScreen);
+        const [games, next] = fetchGames(url.get().split("?")[1], favoriterGames);
       
-      if (!next) nextPage = false;
 
-      if(games.length === 0) {
-        gamecontainer.append(NoGames());
+        if(games.length === 0) {
+          gamecontainer.append(NoGames("No Games In Favorites"));
+          loadingScreen.remove();
+          return;
+        }
+
+        games.forEach((game: any) => {
+          gamecontainer.insertBefore(Card(game), gameContainerEnd);
+        });
+
+        if (next) nextPage = true;
+        
+        page++;
+        observer.observe(gameContainerEnd);
         loadingScreen.remove();
-        return;
+      } catch (error) {
+        gamecontainer.innerHTML = "";
+        gamecontainer.append(Error(render));
       }
-
-      games.forEach((game: any) => {
-        gamecontainer.insertBefore(Card(game), gameContainerEnd);
-      });
-      page++;
-      observer.observe(gameContainerEnd);
-      loadingScreen.remove();
-    });
+    }, []);
   };
 
   url.subscribe(render);

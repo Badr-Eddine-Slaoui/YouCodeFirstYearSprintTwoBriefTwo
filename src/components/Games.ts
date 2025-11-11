@@ -1,6 +1,8 @@
 import { makeEffect, makeQueryParams, makeState } from "../core";
+import { Error } from "../errors/Error";
 import { Card } from "./Card";
 import { LoadingScreen } from "./LoadingScreen";
+import { NoGames } from "./NoGames";
 
 const fetchGames = async (url: string): Promise<any> => {
   const res = await fetch(url);
@@ -18,6 +20,7 @@ export const Games = (
   const loadingScreen = LoadingScreen();
 
   const render = (): void => {
+      console.log("render");
       let page = 1;
       let nextPage = false;
     gamecontainer.innerHTML = "";
@@ -30,19 +33,24 @@ export const Games = (
         loadingScreen.classList.add("h-[10vh]", "sm:col-span-2", "md:col-span-3", "xl:col-span-4");
           gamecontainer.append(loadingScreen);
           if (entries[0].isIntersecting) {
-            queryParams.set(makeQueryParams().get());
-            const [games, next] = await fetchGames(
-              `https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=12&${queryParams.toString()}`
-            );
-              
-            if (!next) nextPage = false;
+            try {
+              queryParams.set(makeQueryParams().get());
+              const [games, next] = await fetchGames(
+                `https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=12&${queryParams.toString()}`
+              );
+                
+              if (!next) nextPage = false;
 
-            loadingScreen.remove();
+              loadingScreen.remove();
 
-            games.forEach((game: any) => {
-              gamecontainer.insertBefore(Card(game), gameContainerEnd);
-            });
-            page++;
+              games.forEach((game: any) => {
+                gamecontainer.insertBefore(Card(game), gameContainerEnd);
+              });
+              page++;
+            } catch (error) {
+              gamecontainer.innerHTML = "";
+              gamecontainer.append(Error(render));
+            }
           }
       }
     });
@@ -50,15 +58,27 @@ export const Games = (
     makeEffect(async () => {
       loadingScreen.classList.add("sm:col-span-2", "md:col-span-3", "xl:col-span-4");
       gamecontainer.append(loadingScreen);
-      const [games, next] = await fetchGames(url.get());
-      games.forEach((game: any) => {
-        gamecontainer.insertBefore(Card(game), gameContainerEnd);
-      });
-      if (next) nextPage = true;
-      page++;
-      observer.observe(gameContainerEnd);
-      loadingScreen.remove();
-    });
+      try {
+        const [games, next] = await fetchGames(url.get());
+        if (games.length === 0) {
+          gamecontainer.append(NoGames("No Games Found"));
+          loadingScreen.remove();
+          return;
+        }
+        games.forEach((game: any) => {
+          gamecontainer.insertBefore(Card(game), gameContainerEnd);
+        });
+
+        if (next) nextPage = true;
+
+        page++;
+        observer.observe(gameContainerEnd);
+        loadingScreen.remove();
+      } catch (error) {
+        gamecontainer.innerHTML = "";
+        gamecontainer.append(Error(render));
+      }
+    }, []);
   };
 
   url.subscribe(render);

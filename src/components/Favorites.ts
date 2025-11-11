@@ -28,7 +28,7 @@ export const Favorites = (): HTMLElement => {
     filterContainer.className =
       "flex flex-col gap-y-6 2xs:gap-y-7 xs:gap-y-8 sm:gap-y-9 md:gap-y-10 lg:flex-row lg:gap-x-2 xl:justify-between";
     filterContainer.append(Search(url));
-    Filters(url).then((res) => filterContainer.append(res));
+    filterContainer.append(Filters(url));
 
     container.append(filterContainer);
 
