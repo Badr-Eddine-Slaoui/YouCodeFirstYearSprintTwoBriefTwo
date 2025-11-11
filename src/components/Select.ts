@@ -11,7 +11,7 @@ export const Select = (
 ): HTMLElement => {
   const container = document.createElement("div") as HTMLDivElement;
   container.className =
-    "relative min-h-[4vh] text-primary rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[24px] xl:rounded-[30px] bg-card transition duration-300 ease-in-out";
+    "relative min-h-[4vh] border border-card text-light-primary dark:text-primary rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[24px] xl:rounded-[30px] bg-light-card dark:bg-card transition duration-300 ease-in-out";
 
   const content = document.createElement("div") as HTMLDivElement;
   content.className =
@@ -30,7 +30,7 @@ export const Select = (
 
   const dropdown = document.createElement("div") as HTMLDivElement;
   dropdown.className =
-    "absolute z-10 max-h-[30vh] overflow-y-auto top-full left-0 bg-card mt-2 rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[26px] xl:rounded-[30px] hidden flex-col gap-y-2 shadow-lg";
+    "absolute z-10 max-h-[30vh] overflow-y-auto top-full left-0 bg-light-card border border-card dark:bg-card mt-2 rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[26px] xl:rounded-[30px] hidden flex-col gap-y-2 shadow-lg";
   container.append(dropdown);
 
   let placeholder: HTMLDivElement | null = null;
@@ -38,17 +38,26 @@ export const Select = (
   options.forEach((option) => {
     const optionElement = document.createElement("div") as HTMLDivElement;
     optionElement.className =
-      "px-6 py-3 cursor-pointer hover:bg-card transition-colors truncate";
+      "px-6 py-3 cursor-pointer hover:bg-light-card dark:bg-card transition-colors truncate";
     optionElement.textContent = option;
 
     if (option === label.textContent) {
       placeholder = optionElement;
-      optionElement.classList.add("bg-primary", "bg-opacity-10");
+      optionElement.classList.add(
+        "text-light-primary", "dark:text-primary",
+        "bg-opacity-10"
+      );
     }
 
     if (option.toLowerCase() === getCurrentOption(options[0].toLowerCase())) {
-      optionElement.classList.add("bg-primary", "bg-opacity-10");
-      placeholder?.classList.remove("bg-primary", "bg-opacity-10");
+      optionElement.classList.add(
+        "text-light-primary", "dark:text-primary",
+        "bg-opacity-10"
+      );
+      placeholder?.classList.remove(
+        "text-light-primary", "dark:text-primary",
+        "bg-opacity-10"
+      );
       label.textContent = option;
     }
 
@@ -65,10 +74,16 @@ export const Select = (
     if (!clicked) return;
 
     dropdown.querySelectorAll("div").forEach((el) => {
-      el.classList.remove("bg-primary", "bg-opacity-10");
+      el.classList.remove(
+        "text-light-primary", "dark:text-primary",
+        "bg-opacity-10"
+      );
     });
 
-    clicked.classList.add("bg-primary", "bg-opacity-10");
+    clicked.classList.add(
+      "text-light-primary", "dark:text-primary",
+      "bg-opacity-10"
+    );
 
     const key = options[0].toLowerCase();
     updateUrl(url, key, clicked.textContent?.toLowerCase() || "");
