@@ -30,7 +30,7 @@ export const Select = (
 
   const dropdown = document.createElement("div") as HTMLDivElement;
   dropdown.className =
-    "absolute z-10 max-h-[30vh] overflow-y-auto top-full left-0 bg-light-card border border-card dark:bg-card mt-2 rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[26px] xl:rounded-[30px] hidden flex-col gap-y-2 shadow-lg";
+    "dropdown absolute z-10 max-h-[30vh] overflow-y-auto top-full left-0 bg-light-card border border-card dark:bg-card mt-2 rounded-[10px] 2xs:rounded-[12px] xs:rounded-[16px] sm:rounded-[18px] md:rounded-[22px] lg:rounded-[26px] xl:rounded-[30px] hidden flex-col gap-y-2 shadow-lg";
   container.append(dropdown);
 
   let placeholder: HTMLDivElement | null = null;
