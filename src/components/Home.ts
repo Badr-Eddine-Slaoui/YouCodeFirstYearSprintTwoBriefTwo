@@ -1,52 +1,40 @@
-import { makeState, makeEffect, makeQueryParams, makeTitle } from "../core";
+import { makeState, makeQueryParams, makeTitle } from "../core";
+import { Filters } from "./Filters";
+import { Games } from "./Games";
+import { Search } from "./Search";
 
 makeTitle("Tofa7iTS - Home");
 
-const effectDeps = new WeakMap<HTMLElement, any[]>(); 
-
 export const Home = (): HTMLElement => {
-  const counter: ReturnType<typeof makeState<number>> = makeState(0);
-  const queryParams : ReturnType<typeof makeQueryParams> = makeQueryParams();
+  const queryParams: ReturnType<typeof makeQueryParams> = makeQueryParams();
+  const url: ReturnType<typeof makeState<string>> = makeState(
+    `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=24&${queryParams.toString()}`
+  );
 
-  const increment = (): void => {
-    counter.set(counter.get() + 1);
-  };
+  const header = document.getElementById("header") as HTMLDivElement;
+  header.classList.remove("hidden");
 
-  const decrement = (): void => {
-    counter.set(counter.get() - 1);
-  };
+  document.getElementById("details-header")?.remove();
 
   const container = document.createElement("div") as HTMLDivElement;
+  container.className =
+    "mt-[8vh] 2xs:mt-[10vh] xs:mt-[11vh] sm:mt-[12vh] md:mt-[15vh]";
 
   const render = (): void => {
     container.innerHTML = "";
 
-    const el = document.createElement("div") as HTMLDivElement;
-    el.className = "p-20 text-center";
-    el.innerHTML = `
-    <h1 class="text-3xl font-bold text-purple-600 mb-4">Home</h1>
-    <p class="text-gray-700">Welcome to Tofa7iTS mini framework</p>
-    <p class="text-gray-700 counter">Counter: ${counter.get()}</p>
-    <button class="inc bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Increment</button>
-    <button class="dec bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Decrement</button>
-  `;
+    const filterContainer = document.createElement("div") as HTMLDivElement;
+    filterContainer.className =
+      "flex flex-col flex-wrap gap-y-6 2xs:gap-y-7 xs:gap-y-8 sm:gap-y-9 md:gap-y-10 lg:flex-row lg:gap-x-2 xl:justify-between";
+    filterContainer.append(Search(url));
+    filterContainer.append(Filters(url));
 
-    el.querySelector(".inc")?.addEventListener("click", increment);
-    el.querySelector(".dec")?.addEventListener("click", decrement);
+    container.append(filterContainer);
 
-    container.append(el);
+    const gamecontainer = Games(queryParams, url);
 
-    makeEffect(
-      () => {
-        console.log("Query Params:", queryParams);
-      },
-      [counter.get()],
-      container,
-      effectDeps
-    );
+    container.append(gamecontainer);
   };
-
-  counter.subscribe(render);
 
   render();
 
