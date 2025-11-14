@@ -4,6 +4,19 @@ import { Card } from "./Card";
 import { LoadingScreen } from "./LoadingScreen";
 import { NoGames } from "./NoGames";
 
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    const card = entry.target as HTMLDivElement;
+    if (entry.isIntersecting) {
+      card.classList.remove("opacity-0", "scale-[.5]");
+      card.classList.add("opacity-100", "scale-[1]");
+    } else {
+      card.classList.remove("opacity-100", "scale-[1]");
+      card.classList.add("opacity-0", "scale-[.5]");
+    }
+  });
+});
+
 
 const fetchGames = (url: string, favoriterGames: any): any => {
   const params = new URLSearchParams(url);
@@ -55,6 +68,7 @@ export const FavoriteGames = (
   );
 
   const gamecontainer = document.createElement("div") as HTMLDivElement;
+  gamecontainer.id = "gamecontainer";
    gamecontainer.className =
      "grid grid-cols-1 gap-y-5 p-4 my-4 sm:grid-cols-2 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4 lg:my-8";
 
@@ -84,7 +98,9 @@ export const FavoriteGames = (
 
               loadingScreen.remove();
               games.forEach((game: any) => {
-                gamecontainer.insertBefore(Card(game), gameContainerEnd);
+                const card = Card(game);
+                gamecontainer.insertBefore(card, gameContainerEnd);
+                requestAnimationFrame(() => cardObserver.observe(card));
               });
               page++;
             }catch (error) {
@@ -109,7 +125,9 @@ export const FavoriteGames = (
         }
 
         games.forEach((game: any) => {
-          gamecontainer.insertBefore(Card(game), gameContainerEnd);
+          const card = Card(game);
+          gamecontainer.insertBefore(card, gameContainerEnd);
+          requestAnimationFrame(() => cardObserver.observe(card));
         });
 
         if (next) nextPage = true;

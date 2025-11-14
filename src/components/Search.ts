@@ -10,7 +10,7 @@ export const Search = (
 ): HTMLElement => {
   const container = document.createElement("div") as HTMLDivElement;
   container.className =
-    "relative w-full h-[5vh] 2xs:h-[7vh] xs:h-[8vh] sm:h-[9vh] md:h-[10vh] lg:h-[8vh] xl:h-[10vh]" +
+    "relative w-full h-[5vh] 2xs:h-[7vh] xs:h-[8vh] sm:h-[9vh] md:h-[8vh]" +
     " flex items-center justify-center px-4 text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.6rem] lg:text-[1.4rem] xl:text-[1.6rem]" +
     " lg:w-[45%]";
 

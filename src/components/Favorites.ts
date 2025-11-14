@@ -9,7 +9,7 @@ makeTitle("Tofa7iTS - Favorites");
 export const Favorites = (): HTMLElement => {
   const queryParams: ReturnType<typeof makeQueryParams> = makeQueryParams();
   const url: ReturnType<typeof makeState<string>> = makeState(
-    `page=1&limit=12&${queryParams.toString()}`
+    `page=1&limit=24&${queryParams.toString()}`
   );
   
   const header = document.getElementById("header") as HTMLDivElement;
