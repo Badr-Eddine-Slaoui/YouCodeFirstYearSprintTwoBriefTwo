@@ -7,12 +7,18 @@ export default {
       animation: {
         "switch-component": "switch-component 1.2s ease-in-out",
         "spin-slow": "spin 6s infinite ease-in-out",
+        twerk: "twerk 1.5s ease-in-out",
       },
       keyframes: {
         "switch-component": {
           "0%": { opacity: 0 },
           "10%": { opacity: 1 },
           "100%": { opacity: 0 },
+        },
+        twerk: {
+          "0%, 100%": { transform: "rotateZ(0deg)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "rotateZ(20deg)" },
+          "20%, 40%, 60%, 80%": { transform: "rotateZ(-20deg)" },
         },
       },
       colors: {

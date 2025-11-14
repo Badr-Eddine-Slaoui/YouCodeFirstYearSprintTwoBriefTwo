@@ -8,7 +8,7 @@ makeTitle("Tofa7iTS - Home");
 export const Home = (): HTMLElement => {
   const queryParams: ReturnType<typeof makeQueryParams> = makeQueryParams();
   const url: ReturnType<typeof makeState<string>> = makeState(
-    `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=12&${queryParams.toString()}`
+    `https://debuggers-games-api.duckdns.org/api/games?page=1&limit=24&${queryParams.toString()}`
   );
 
   const header = document.getElementById("header") as HTMLDivElement;
@@ -17,7 +17,7 @@ export const Home = (): HTMLElement => {
   document.getElementById("details-header")?.remove();
   
   const container = document.createElement("div") as HTMLDivElement;
-  container.className = "mt-[8vh] 2xs:mt-[10vh] xs:mt-[11vh] sm:mt-[12vh] md:mt-[15vh] lg:mt-[17vh] xl:mt-[20vh]";
+  container.className = "mt-[8vh] 2xs:mt-[10vh] xs:mt-[11vh] sm:mt-[12vh] md:mt-[15vh]";
 
   const render = (): void => {
     container.innerHTML = "";

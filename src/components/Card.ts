@@ -1,4 +1,5 @@
 import { router } from "../main";
+import { NoGames } from "./NoGames";
 
 let favoriterGames = JSON.parse(localStorage.getItem("favoriterGames") || "[]");
 
@@ -19,7 +20,7 @@ const isFavorite = (game: any) => {
 export const Card = (game: any): HTMLElement => {
   const card = document.createElement("div") as HTMLDivElement;
   card.className =
-    "h-[40vh] w-full border border-card bg-light-card dark:bg-card rounded-[10px] overflow-hidden xs:h-[45vh] lg:h-[55vh] xl:h-[65vh]" +
+    "h-[40vh] w-full border border-card bg-light-card dark:bg-card rounded-[10px] overflow-hidden opacity-100 scale-[1] transition duration-[1s] ease-in-out cursor-pointer xs:h-[45vh] lg:h-[55vh] xl:h-[65vh]" +
     " text-[0.8rem] 2xs:text-[1rem] xs:text-[1.2rem] sm:text-[1.4rem] md:text-[1.1rem] lg:text-[1.5rem] xl:text-[1.6rem]";
 
   card.dataset.id = game.id.toString();
@@ -101,6 +102,8 @@ export const Card = (game: any): HTMLElement => {
 
     card.setAttribute("draggable", "true");
 
+    const favorite = document.getElementById("favorites") as HTMLDivElement;
+
     card.addEventListener("dragstart", (e) => {
       const draggedCard = e.currentTarget as HTMLDivElement;
 
@@ -143,19 +146,32 @@ export const Card = (game: any): HTMLElement => {
         document.body.removeChild(ghostCard);
       }, 0);
 
-      card.classList.add("opacity-50", "cursor-grabbing");
+      draggedCard.classList.remove("opacity-100", "scale-[1]", "duration-[1s]");
+
+      draggedCard.classList.add(
+        "opacity-50",
+        "scale-[0.5]",
+        "cursor-grabbing",
+        "transition-all",
+        "duration-300"
+      );
     });
 
     card.addEventListener("drag", (e) => {
       const current = e.currentTarget as HTMLDivElement;
 
-      card.classList.add(
+      current.classList.remove(
+        "opacity-100",
+        "scale-[1]",
+        "duration-[1s]"
+      );
+
+      current.classList.add(
         "opacity-50",
         "scale-[0.5]",
         "cursor-grabbing",
         "transition-all",
-        "duration-300",
-        "ease-in-out"
+        "duration-300"
       );
 
       if (
@@ -172,8 +188,26 @@ export const Card = (game: any): HTMLElement => {
     card.addEventListener("dragover", (e) => {
       e.preventDefault();
 
+      const currentCard = e.currentTarget as HTMLDivElement;
+
+      currentCard.classList.remove(
+        "opacity-100",
+        "scale-[1]",
+        "duration-[1s]"
+      );
+
+      currentCard.classList.add(
+        "opacity-50",
+        "scale-[0.5]",
+        "cursor-grabbing",
+        "transition-all",
+        "duration-300"
+      );
+      
+
       const container = card.parentElement as HTMLDivElement;
-      const rect = container.getBoundingClientRect();
+      const rect = currentCard.getBoundingClientRect();
+      
       const scrollSpeed = 10;
 
       if (e.clientY < rect.top + 50) {
@@ -181,38 +215,49 @@ export const Card = (game: any): HTMLElement => {
       } else if (e.clientY > rect.bottom - 50) {
         container.scrollBy({ top: scrollSpeed, behavior: "smooth" });
       }
-
-      card.classList.add(
-        "opacity-50",
-        "scale-[0.5]",
-        "cursor-grabbing",
-        "transition-all",
-        "duration-300",
-        "ease-in-out"
-      );
     });
 
     card.addEventListener("dragend", (e) => {
       e.preventDefault();
-      const card = e.currentTarget as HTMLDivElement;
-      card.classList.remove(
+      const currentCard = e.currentTarget as HTMLDivElement;
+      if (
+        favorite.children[0].classList.contains("fa-trash-can") &&
+        !favorite.children[0].classList.contains("animate-twerk")
+      ) {
+        favorite.children[0].classList.remove("fa-trash-can");
+        favorite.children[0].classList.add("fa-heart");
+      }
+
+      currentCard.classList.remove(
         "opacity-50",
         "scale-[0.5]",
         "cursor-grabbing",
         "transition-all",
-        "duration-300",
-        "ease-in-out"
+        "duration-300"
+      );
+
+      currentCard.classList.add(
+        "opacity-100",
+        "scale-[1]",
+        "duration-[1s]"
       );
     });
 
-    card.addEventListener("dragleave", () => {
-      card.classList.remove(
+    card.addEventListener("dragleave", (e) => {
+      const currentCard = e.currentTarget as HTMLDivElement;
+
+      currentCard.classList.remove(
         "opacity-50",
         "scale-[0.5]",
         "cursor-grabbing",
         "transition-all",
-        "duration-300",
-        "ease-in-out"
+        "duration-300"
+      );
+
+      currentCard.classList.add(
+        "opacity-100",
+        "scale-[1]",
+        "duration-[1s]"
       );
     });
 
@@ -228,6 +273,12 @@ export const Card = (game: any): HTMLElement => {
 
       const nextSibling = draggedCard.nextElementSibling as HTMLDivElement;
 
+      draggedOverCard.classList.add(
+        "opacity-100",
+        "scale-[1]",
+        "duration-[1s]"
+      );
+
       draggedOverCard.classList.remove(
         "opacity-50",
         "scale-[0.5]",
@@ -237,14 +288,27 @@ export const Card = (game: any): HTMLElement => {
         "ease-in-out"
       );
 
-      container.insertBefore(draggedCard, draggedOverCard);
+      draggedOverCard.insertAdjacentElement("afterend", draggedCard);
       container.insertBefore(draggedOverCard, nextSibling);
-    });
 
-    const favorite = document.getElementById("favorites") as HTMLDivElement;
+      if (window.location.pathname === "/favorites") {
+        const draggedGame = JSON.parse(draggedCard.dataset.game as string);
+        const draggedOverGame = JSON.parse(draggedOverCard.dataset.game as string);
+
+        const draggedIndex = favoriterGames.findIndex((g: any) => g.id === draggedGame.id)
+        const draggedOverIndex = favoriterGames.findIndex((g: any) => g.id === draggedOverGame.id)
+
+        favoriterGames[draggedIndex] = draggedOverGame;
+        favoriterGames[draggedOverIndex] = draggedGame;
+        
+        localStorage.setItem("favoriterGames", JSON.stringify(favoriterGames));
+      }
+    });
+    
     favorite.ondragover = (e) => {
       e.preventDefault();
     };
+
     favorite.ondrop = (e) => {
       e.preventDefault();
       const draggedCardId = e.dataTransfer?.getData("draggedCardId") as string;
@@ -258,16 +322,35 @@ export const Card = (game: any): HTMLElement => {
         (g: any) => g.id === parseInt(draggedCardId)
       );
 
+
+      favorite.children[0].classList.add("animate-twerk");
+
       if (isInFavorites) {
         removeFromFavorites(currentGame);
-        if (window.location.pathname === "/favorites") draggedCard.remove();
-      } else {
-        addToFavorites(currentGame);
+        setTimeout(() => {
+          console.log("test");
+          favorite.children[0].classList.remove("animate-twerk");
+          favorite.children[0].classList.remove("fa-trash-can");
+          favorite.children[0].classList.add("fa-heart");
+        }, 1500);
+        if (window.location.pathname === "/favorites") {
+          if(favoriterGames.length === 0) {
+            const gamecontainer = document.querySelector("#gamecontainer") as HTMLDivElement;
+            gamecontainer.innerHTML = "";
+            gamecontainer.append(NoGames("No Games In Favorites"));
+          }
+          draggedCard.remove()
+        };
       }
-      favorite.children[0].classList.remove("fa-trash-can");
-      favorite.children[0].classList.add("fa-heart");
-      const cardComponent = Card(currentGame);
-      draggedCard.replaceWith(cardComponent);
+      else {
+        addToFavorites(currentGame);
+        setTimeout(() => {
+          favorite.children[0].classList.remove("animate-twerk");
+        }, 1500);
+      }
+
+      const newCard = Card(currentGame);
+      draggedCard.replaceWith(newCard);
     };
   };
 

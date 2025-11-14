@@ -10,6 +10,21 @@ const fetchGames = async (url: string): Promise<any> => {
   return [data.results, data.next];
 };
 
+const cardObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const card = entry.target as HTMLDivElement;
+      if (entry.isIntersecting) {
+        card.classList.remove("opacity-0", "scale-[.5]");
+        card.classList.add("opacity-100", "scale-[1]");
+      } else {
+        card.classList.remove("opacity-100", "scale-[1]");
+        card.classList.add("opacity-0", "scale-[.5]");
+      }
+    });
+  }
+);
+
 export const Games = (
   queryParams: ReturnType<typeof makeQueryParams>,
   url: ReturnType<typeof makeState<string>>
@@ -35,7 +50,7 @@ export const Games = (
             try {
               queryParams.set(makeQueryParams().get());
               const [games, next] = await fetchGames(
-                `https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=12&${queryParams.toString()}`
+                `https://debuggers-games-api.duckdns.org/api/games?page=${page}&limit=24&${queryParams.toString()}`
               );
                 
               if (!next) nextPage = false;
@@ -43,7 +58,9 @@ export const Games = (
               loadingScreen.remove();
 
               games.forEach((game: any) => {
-                gamecontainer.insertBefore(Card(game), gameContainerEnd);
+                const card = Card(game);
+                gamecontainer.insertBefore(card, gameContainerEnd);
+                requestAnimationFrame(() => cardObserver.observe(card));
               });
               page++;
             } catch (error) {
@@ -65,7 +82,9 @@ export const Games = (
           return;
         }
         games.forEach((game: any) => {
-          gamecontainer.insertBefore(Card(game), gameContainerEnd);
+          const card = Card(game);
+          gamecontainer.insertBefore(card, gameContainerEnd);
+          requestAnimationFrame(() => cardObserver.observe(card));
         });
 
         if (next) nextPage = true;

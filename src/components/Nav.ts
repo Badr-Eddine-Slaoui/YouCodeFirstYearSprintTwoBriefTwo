@@ -13,8 +13,8 @@ export const Nav = (
     "xs:p-6 xs:h-[9vh] xs:text-[1.2rem] " +
     "sm:p-8 sm:h-[10vh] sm:text-[1.4rem] " +
     "md:p-8 md:h-[12vh] md:text-[1.6rem] " +
-    "lg:p-10 lg:h-[14vh] lg:text-[1.8rem] " +
-    "xl:p-12 xl:h-[16vh] xl:text-[2rem] " +
+    "lg:p-10 lg:text-[1.8rem] " +
+    "xl:p-12 xl:text-[2rem] " +
     "transition-all duration-300 ease-in-out";
 
   const logoContainer = document.createElement("div") as HTMLDivElement;
