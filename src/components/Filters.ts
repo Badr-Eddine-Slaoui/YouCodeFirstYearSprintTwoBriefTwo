@@ -20,9 +20,9 @@ export const Filters = (
         fetch(`${api}/api/genres`).then((res) => res.json()),
         fetch(`${api}/api/platforms`).then((res) => res.json()),
       ]);
-      container.append(Select(url, ["Genre", ...genres]));
-      container.append(Select(url, ["Platform", ...platforms]));
-      container.append(Select(url, ["Rating", "1", "2", "3", "4", "5"]));
+      container.append(Select(url, [{name:"Genres", slug:"genre"}, ...genres]));
+      container.append(Select(url, [{name:"Platforms", slug:"platform"}, ...platforms]));
+      container.append(Select(url, [{name:"Ratings", slug:"rating" }, {name:"1 Star", slug:"1"}, {name:"2 Stars", slug:"2"}, {name:"3 Stars", slug:"3"}, {name:"4 Stars", slug:"4"}, {name:"5 Stars", slug:"5"}]));
     } catch (error) {
       container.classList.remove("justify-start");
       container.classList.add("justify-center", "w-full");

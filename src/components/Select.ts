@@ -7,7 +7,7 @@ const getCurrentOption = (key: string): string => {
 
 export const Select = (
   url: ReturnType<typeof makeState<string>>,
-  options: Array<string>
+  options: Array<{ name: string; slug: string }>
 ): HTMLElement => {
   const container = document.createElement("div") as HTMLDivElement;
   container.className =
@@ -19,7 +19,7 @@ export const Select = (
 
   const label = document.createElement("span") as HTMLSpanElement;
   label.className = "truncate max-w-[12rem] sm:max-w-[16rem]";
-  label.textContent = options[0];
+  label.textContent = options[0].name
   content.append(label);
 
   const icon = document.createElement("i") as HTMLDivElement;
@@ -39,9 +39,10 @@ export const Select = (
     const optionElement = document.createElement("div") as HTMLDivElement;
     optionElement.className =
       "px-6 py-3 cursor-pointer hover:bg-light-card dark:bg-card transition-colors truncate";
-    optionElement.textContent = option;
+    optionElement.textContent = option.name;
+    optionElement.dataset.value = option.slug;
 
-    if (option === label.textContent) {
+    if (option.name === label.textContent) {
       placeholder = optionElement;
       optionElement.classList.add(
         "text-light-primary",
@@ -50,7 +51,7 @@ export const Select = (
       );
     }
 
-    if (option.toLowerCase() === getCurrentOption(options[0].toLowerCase())) {
+    if (option.slug === getCurrentOption(options[0].slug)) {
       optionElement.classList.add(
         "text-light-primary",
         "dark:text-primary",
@@ -61,7 +62,7 @@ export const Select = (
         "dark:text-primary",
         "bg-opacity-10"
       );
-      label.textContent = option;
+      label.textContent = option.name;
     }
 
     dropdown.append(optionElement);
@@ -90,8 +91,8 @@ export const Select = (
       "bg-opacity-10"
     );
 
-    const key = options[0].toLowerCase();
-    updateUrl(url, key, clicked.textContent?.toLowerCase() || "");
+    const key = options[0].slug;
+    updateUrl(url, key, clicked.dataset.value || "");
 
     label.textContent = clicked.textContent || "";
     dropdown.classList.add("hidden");
