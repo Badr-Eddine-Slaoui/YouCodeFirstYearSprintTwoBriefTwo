@@ -37,7 +37,8 @@ export const Search = (
   input.addEventListener("focus", () => {
     button.classList.remove(
       "border-primary",
-      "text-light-primary", "dark:text-primary"
+      "text-light-primary",
+      "dark:text-primary"
     );
     button.classList.add("border-purple-500", "text-purple-500");
   });
@@ -46,7 +47,8 @@ export const Search = (
     button.classList.remove("border-purple-500", "text-purple-500");
     button.classList.add(
       "border-primary",
-      "text-light-primary", "dark:text-primary"
+      "text-light-primary",
+      "dark:text-primary"
     );
   });
 

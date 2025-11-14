@@ -52,7 +52,8 @@ export const Card = (game: any): HTMLElement => {
       });
     } else {
       icon.classList.add(
-        "text-light-primary", "dark:text-primary",
+        "text-light-primary",
+        "dark:text-primary",
         "fa-regular",
         "fa-heart"
       );
@@ -160,11 +161,7 @@ export const Card = (game: any): HTMLElement => {
     card.addEventListener("drag", (e) => {
       const current = e.currentTarget as HTMLDivElement;
 
-      current.classList.remove(
-        "opacity-100",
-        "scale-[1]",
-        "duration-[1s]"
-      );
+      current.classList.remove("opacity-100", "scale-[1]", "duration-[1s]");
 
       current.classList.add(
         "opacity-50",
@@ -190,11 +187,7 @@ export const Card = (game: any): HTMLElement => {
 
       const currentCard = e.currentTarget as HTMLDivElement;
 
-      currentCard.classList.remove(
-        "opacity-100",
-        "scale-[1]",
-        "duration-[1s]"
-      );
+      currentCard.classList.remove("opacity-100", "scale-[1]", "duration-[1s]");
 
       currentCard.classList.add(
         "opacity-50",
@@ -203,11 +196,10 @@ export const Card = (game: any): HTMLElement => {
         "transition-all",
         "duration-300"
       );
-      
 
       const container = card.parentElement as HTMLDivElement;
       const rect = currentCard.getBoundingClientRect();
-      
+
       const scrollSpeed = 10;
 
       if (e.clientY < rect.top + 50) {
@@ -236,11 +228,7 @@ export const Card = (game: any): HTMLElement => {
         "duration-300"
       );
 
-      currentCard.classList.add(
-        "opacity-100",
-        "scale-[1]",
-        "duration-[1s]"
-      );
+      currentCard.classList.add("opacity-100", "scale-[1]", "duration-[1s]");
     });
 
     card.addEventListener("dragleave", (e) => {
@@ -254,11 +242,7 @@ export const Card = (game: any): HTMLElement => {
         "duration-300"
       );
 
-      currentCard.classList.add(
-        "opacity-100",
-        "scale-[1]",
-        "duration-[1s]"
-      );
+      currentCard.classList.add("opacity-100", "scale-[1]", "duration-[1s]");
     });
 
     card.addEventListener("drop", (e) => {
@@ -293,18 +277,24 @@ export const Card = (game: any): HTMLElement => {
 
       if (window.location.pathname === "/favorites") {
         const draggedGame = JSON.parse(draggedCard.dataset.game as string);
-        const draggedOverGame = JSON.parse(draggedOverCard.dataset.game as string);
+        const draggedOverGame = JSON.parse(
+          draggedOverCard.dataset.game as string
+        );
 
-        const draggedIndex = favoriterGames.findIndex((g: any) => g.id === draggedGame.id)
-        const draggedOverIndex = favoriterGames.findIndex((g: any) => g.id === draggedOverGame.id)
+        const draggedIndex = favoriterGames.findIndex(
+          (g: any) => g.id === draggedGame.id
+        );
+        const draggedOverIndex = favoriterGames.findIndex(
+          (g: any) => g.id === draggedOverGame.id
+        );
 
         favoriterGames[draggedIndex] = draggedOverGame;
         favoriterGames[draggedOverIndex] = draggedGame;
-        
+
         localStorage.setItem("favoriterGames", JSON.stringify(favoriterGames));
       }
     });
-    
+
     favorite.ondragover = (e) => {
       e.preventDefault();
     };
@@ -322,7 +312,6 @@ export const Card = (game: any): HTMLElement => {
         (g: any) => g.id === parseInt(draggedCardId)
       );
 
-
       favorite.children[0].classList.add("animate-twerk");
 
       if (isInFavorites) {
@@ -334,15 +323,16 @@ export const Card = (game: any): HTMLElement => {
           favorite.children[0].classList.add("fa-heart");
         }, 1500);
         if (window.location.pathname === "/favorites") {
-          if(favoriterGames.length === 0) {
-            const gamecontainer = document.querySelector("#gamecontainer") as HTMLDivElement;
+          if (favoriterGames.length === 0) {
+            const gamecontainer = document.querySelector(
+              "#gamecontainer"
+            ) as HTMLDivElement;
             gamecontainer.innerHTML = "";
             gamecontainer.append(NoGames("No Games In Favorites"));
           }
-          draggedCard.remove()
-        };
-      }
-      else {
+          draggedCard.remove();
+        }
+      } else {
         addToFavorites(currentGame);
         setTimeout(() => {
           favorite.children[0].classList.remove("animate-twerk");

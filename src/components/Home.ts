@@ -15,15 +15,17 @@ export const Home = (): HTMLElement => {
   header.classList.remove("hidden");
 
   document.getElementById("details-header")?.remove();
-  
+
   const container = document.createElement("div") as HTMLDivElement;
-  container.className = "mt-[8vh] 2xs:mt-[10vh] xs:mt-[11vh] sm:mt-[12vh] md:mt-[15vh]";
+  container.className =
+    "mt-[8vh] 2xs:mt-[10vh] xs:mt-[11vh] sm:mt-[12vh] md:mt-[15vh]";
 
   const render = (): void => {
     container.innerHTML = "";
 
     const filterContainer = document.createElement("div") as HTMLDivElement;
-    filterContainer.className = "flex flex-col flex-wrap gap-y-6 2xs:gap-y-7 xs:gap-y-8 sm:gap-y-9 md:gap-y-10 lg:flex-row lg:gap-x-2 xl:justify-between";
+    filterContainer.className =
+      "flex flex-col flex-wrap gap-y-6 2xs:gap-y-7 xs:gap-y-8 sm:gap-y-9 md:gap-y-10 lg:flex-row lg:gap-x-2 xl:justify-between";
     filterContainer.append(Search(url));
     filterContainer.append(Filters(url));
 
@@ -33,7 +35,7 @@ export const Home = (): HTMLElement => {
 
     container.append(gamecontainer);
   };
-  
+
   render();
 
   return container;

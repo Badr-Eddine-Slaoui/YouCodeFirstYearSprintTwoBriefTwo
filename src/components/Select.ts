@@ -44,18 +44,21 @@ export const Select = (
     if (option === label.textContent) {
       placeholder = optionElement;
       optionElement.classList.add(
-        "text-light-primary", "dark:text-primary",
+        "text-light-primary",
+        "dark:text-primary",
         "bg-opacity-10"
       );
     }
 
     if (option.toLowerCase() === getCurrentOption(options[0].toLowerCase())) {
       optionElement.classList.add(
-        "text-light-primary", "dark:text-primary",
+        "text-light-primary",
+        "dark:text-primary",
         "bg-opacity-10"
       );
       placeholder?.classList.remove(
-        "text-light-primary", "dark:text-primary",
+        "text-light-primary",
+        "dark:text-primary",
         "bg-opacity-10"
       );
       label.textContent = option;
@@ -75,13 +78,15 @@ export const Select = (
 
     dropdown.querySelectorAll("div").forEach((el) => {
       el.classList.remove(
-        "text-light-primary", "dark:text-primary",
+        "text-light-primary",
+        "dark:text-primary",
         "bg-opacity-10"
       );
     });
 
     clicked.classList.add(
-      "text-light-primary", "dark:text-primary",
+      "text-light-primary",
+      "dark:text-primary",
       "bg-opacity-10"
     );
 

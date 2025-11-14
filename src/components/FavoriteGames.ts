@@ -17,7 +17,6 @@ const cardObserver = new IntersectionObserver((entries) => {
   });
 });
 
-
 const fetchGames = (url: string, favoriterGames: any): any => {
   const params = new URLSearchParams(url);
   let games = favoriterGames;
@@ -62,21 +61,20 @@ export const FavoriteGames = (
   queryParams: ReturnType<typeof makeQueryParams>,
   url: ReturnType<typeof makeState<string>>
 ): HTMLElement => {
-
   let favoriterGames = JSON.parse(
     localStorage.getItem("favoriterGames") || "[]"
   );
 
   const gamecontainer = document.createElement("div") as HTMLDivElement;
   gamecontainer.id = "gamecontainer";
-   gamecontainer.className =
-     "grid grid-cols-1 gap-y-5 p-4 my-4 sm:grid-cols-2 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4 lg:my-8";
+  gamecontainer.className =
+    "grid grid-cols-1 gap-y-5 p-4 my-4 sm:grid-cols-2 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4 lg:my-8";
 
   const loadingScreen = LoadingScreen();
 
-    const render = (): void => {
-      let page = 1;
-      let nextPage = false;
+  const render = (): void => {
+    let page = 1;
+    let nextPage = false;
     gamecontainer.innerHTML = "";
     const gameContainerEnd = document.createElement("div") as HTMLDivElement;
     gamecontainer.append(gameContainerEnd);
@@ -85,29 +83,29 @@ export const FavoriteGames = (
       if (nextPage) {
         loadingScreen.classList.remove("h-screen");
         loadingScreen.classList.add("h-[10vh]", "col-span-2");
-          gamecontainer.append(loadingScreen);
-          if (entries[0].isIntersecting) {
-            try {
-              queryParams.set(makeQueryParams().get());
-              const [games, next] = fetchGames(
-                `page=${page}&limit=12&${queryParams.toString()}`,
-                favoriterGames
-              );
-                
-              if (!next) nextPage = false;
+        gamecontainer.append(loadingScreen);
+        if (entries[0].isIntersecting) {
+          try {
+            queryParams.set(makeQueryParams().get());
+            const [games, next] = fetchGames(
+              `page=${page}&limit=12&${queryParams.toString()}`,
+              favoriterGames
+            );
 
-              loadingScreen.remove();
-              games.forEach((game: any) => {
-                const card = Card(game);
-                gamecontainer.insertBefore(card, gameContainerEnd);
-                requestAnimationFrame(() => cardObserver.observe(card));
-              });
-              page++;
-            }catch (error) {
-              gamecontainer.innerHTML = "";
-              gamecontainer.append(Error(render));
-            }
+            if (!next) nextPage = false;
+
+            loadingScreen.remove();
+            games.forEach((game: any) => {
+              const card = Card(game);
+              gamecontainer.insertBefore(card, gameContainerEnd);
+              requestAnimationFrame(() => cardObserver.observe(card));
+            });
+            page++;
+          } catch (error) {
+            gamecontainer.innerHTML = "";
+            gamecontainer.append(Error(render));
           }
+        }
       }
     });
 
@@ -115,10 +113,12 @@ export const FavoriteGames = (
       try {
         loadingScreen.classList.add("col-span-2");
         gamecontainer.append(loadingScreen);
-        const [games, next] = fetchGames(url.get().split("?")[1], favoriterGames);
-      
+        const [games, next] = fetchGames(
+          url.get().split("?")[1],
+          favoriterGames
+        );
 
-        if(games.length === 0) {
+        if (games.length === 0) {
           gamecontainer.append(NoGames("No Games In Favorites"));
           loadingScreen.remove();
           return;
@@ -131,7 +131,7 @@ export const FavoriteGames = (
         });
 
         if (next) nextPage = true;
-        
+
         page++;
         observer.observe(gameContainerEnd);
         loadingScreen.remove();

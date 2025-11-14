@@ -69,12 +69,15 @@ export const Nav = (
 
     themeSwitcher.onclick = () => {
       document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+      localStorage.setItem(
+        "theme",
+        document.documentElement.classList.contains("dark") ? "dark" : "light"
+      );
       renderThemeIcon();
-    }
+    };
 
     nav.appendChild(themeSwitcher);
-  }
+  };
 
   renderThemeIcon();
 

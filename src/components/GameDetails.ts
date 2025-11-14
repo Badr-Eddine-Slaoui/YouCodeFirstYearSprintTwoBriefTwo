@@ -266,7 +266,12 @@ export const GameDetails = (params?: Record<string, string>): HTMLElement => {
     if (isFavorite(game)) {
       favoriteIcon.classList.add("fa-solid", "fa-heart", "text-red-500");
     } else {
-      favoriteIcon.classList.add("fa-regular", "fa-heart", "text-light-primary", "dark:text-primary");
+      favoriteIcon.classList.add(
+        "fa-regular",
+        "fa-heart",
+        "text-light-primary",
+        "dark:text-primary"
+      );
     }
     favoriteBtn.append(favoriteIcon);
 
